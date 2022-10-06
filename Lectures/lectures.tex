@@ -1,0 +1,125 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage{polski}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[margin = 0.5in, top = 1in]{geometry}
+\usepackage{fancyhdr}
+\usepackage{physics}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{subfig}
+\usepackage{verbatim}
+\usepackage{svg}
+\usepackage{textgreek}
+\usepackage[doublespacing]{setspace}
+\usepackage[toc,page]{appendix}
+\restylefloat{table}
+\pagestyle{fancy}
+\fancyhf{}
+\newcommand{\Ti}{Statistical Data Analysis 2}
+\newcommand{\Author}{Mateusz Kapusta}
+\newcommand{\dane}{\mathcal{D}}
+\newcommand{\Title}{Statistical Data Analysis 2}
+\title{\huge \bf \Title\\}
+\author{Mateusz Kapusta}
+
+\rhead{\it \Ti}
+\lhead{\Author}
+\begin{document}
+\maketitle
+\section{Start}
+Grading rules
+\begin{itemize}
+    \item 50\% exam (test as usuall)
+    \item 15\% and 15\% for two labolatory projects
+    \item 15\% midterm test
+    \item 5\% lab activity
+\end{itemize}
+Pass with 50\% as usual.
+
+\section{Lets gooooo}
+First some formulas. We denote joint probability of  $mathcal{D}$ and $Y$ $P(X,Y)$. As we know:
+\begin{equation}
+    P(\mathcal{D})=\sum_{Y}P(X,Y)
+\end{equation}
+. Then we have conditional probability 
+\begin{equation}
+    P(\mathcal{D}|Y)=\frac{P(X,Y)}{P(Y)}
+\end{equation}
+Theeeen
+\begin{equation}\label{bayes}
+    P(\mathcal{D}|Y)=P(Y|X)\frac{P(X)}{P(Y)}
+\end{equation}
+aka Bayes theorem.
+\subsection{Statistical inference}
+Let try to reanalyse coin toss experiment. Let's assume that we have $\theta$ as our propability of heads. When we act in frequentist approach we want to estimate parameter
+$\theta$ using methodes as MLE. What we need to claryify we belive there is God's rule that there exist one and only $\theta$ value. In Bayesian framework we do not think aobut tru parameter but 
+rather conditional probability $P(\theta|mathcal{D})$ ($X$ is observed data). Lets introduce
+\begin{equation}
+    L(\theta)=P(mathcal{D}|\theta)
+\end{equation}
+As we know
+\begin{equation}
+    P(\mathcal{D}|\theta)=\theta^k(1-\theta)^{N-k}
+\end{equation}
+When we have $N$ tosses and $k$ sucesses. We can of course use ML estimator and will in the limit converge.
+We take logliklihood
+\begin{equation}
+    l(\theta)=k\log\theta+(N-k)\log{(1-\theta)}
+\end{equation}
+In ML approach we know that $\hat{\theta}=\frac{k}{N}$ but we want more then point estimator! In frequentist approach we know we can use something like repeat data generating process 
+but we can clearly see that this approach isn't going to be very usefull. There is better way, we can use propability to obtain $k$ times sucess.
+\begin{equation}
+    P(\hat{\theta})=\theta^{\hat{\theta}N}(1-\theta)^{N(1-\hat{\theta})}{N \choose \hat{\theta}N }
+\end{equation}
+So we know that we can in fact obtain prob denisty for $\hat{\theta}$. It is possible to conduct analysis of propability when we do something like bootstrap. In 
+bayesian statistics we think about prior. It is purly our belif about the propability of parameter. Lets decompose \ref{bayes}.
+\begin{itemize}
+    \item $P(\theta|\mathcal{D})$ - posterior
+    \item $P(\mathcal{D}|\theta)$ - likelihood
+    \item $P(\theta)$ - prior
+    \item $P(\mathcal{D})$ - constant
+\end{itemize}
+Sometimes life is hard (and we need to use MCMC), sometimes is easy (if we choose easy prior known and conjugate prior) so choose wisely. One of the conjugate priors is 
+beta distribution (for binomial likelihood).
+\begin{equation}
+    \mathcal{B}(\theta|\alpha,\beta)=\frac{\Gamma(\alpha+\beta)}{\Gamma(\alpha)+\Gamma(\beta)}\theta^{\alpha-1}(1-\theta)^{\beta-1}
+\end{equation}
+This distribution is defined on $[0,1]$ and if $\beta=1$ and $\alpha=1$ we get uniform prior (in other cases it looks very diffrent so we can choose something that suits us).
+We also have mean of the distribution at $\mu=\frac{\alpha}{\beta+\alpha}$ so making $\alpha>>\beta$ makes distribution shifted to the right.
+Lets rewind
+\begin{equation}
+    P(\mathcal{D}|\theta)={N\choose k}\theta^k(1-\theta)^{N-k}
+\end{equation}
+When we use Beta distribution as prior we get posterior
+\begin{equation}
+    P(\theta|\mathcal{D})=\mathcal{B}(\theta|k+\alpha,N-k+\beta)
+\end{equation}
+so we know that posterior is very nice.
+Now lets introduce some new point estimators
+\begin{itemize}
+    \item MAP (Maximum aposteriori estimate) $\theta_{MAP}=argmax_{\theta}P(\theta|\mathcal{D})$
+    \item ML (Maximum likelihood estimate) $\theta_{ML}=argmax_{\theta}P(\mathcal{D}|\theta)$
+\end{itemize}
+In the limit of the number of samples both estimators converge to the same value due to the fact that prior is dominativ. With know data prior dominates and things differ.
+\section{Bayesian networks}
+Bayesian network consist of 
+\begin{itemize}
+    \item directed acyclic graph (DAG) $G=(V,E)$
+    \item local propability distribution, one for each vertex
+\end{itemize}
+Propabilit distribution for joint values $X=(X_1,\ldots,X_l)$ is
+\begin{equation}
+    P(X)=\Pi_{i} P(X_i|pa(X_i))
+\end{equation}
+so we just multiply over conditional propabilities between node and it's parrent.
+We can consider something like linear gaussian model so we have 
+\begin{equation}
+    P(X_n|pa(X_{n}))=Norm(b_n+\omega_{n}^{t}X_{pa(n)},va_n)
+\end{equation}
+so each vertex is charaterized by two values, mean and covariance matrix.
+
+\end{document}
