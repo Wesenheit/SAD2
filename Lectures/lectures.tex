@@ -1,5 +1,4 @@
 \documentclass[12pt,a4paper]{article}
-
 \usepackage{polski}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -121,5 +120,72 @@ We can consider something like linear gaussian model so we have
     P(X_n|pa(X_{n}))=Norm(b_n+\omega_{n}^{t}X_{pa(n)},va_n)
 \end{equation}
 so each vertex is charaterized by two values, mean and covariance matrix.
+\subsection{Markov Blancket}
+Markov blancket is subset of Bayesian is set of parents, coparents and children for given vertex. It is usefull as it contains all informations to calculate conditional propability of
+value of given vertex. We can say, that $P(V| all)=P(V|MB(V))$. Simplifing things we can say that
+\begin{equation}
+    P(V|all)=P(V|MB(V))=\frac{\sum P(V|parents)+P(children|V,coparents)}{Normalization}
+\end{equation}
+So it is important when we are sampling using MCMC. 
+\subsection{Conditional independence}
+We say that $A$ and $B$ are conditional independent given $C$ and wreite $A \perp B |C$. If $A$ and $B$ are children of $C$ then we have conditional independence, the same
+when there is connection between $A$ and $B$ through $C$ but not when $C$ is child of $A$ and $B$. In fact, when $A$ and $B$ meet head to head we have independence but not conditional independence.
+Now let write some more definitions
+\begin{itemize}
+    \item let $A$ and $B$ amd $z$ is set of other nodes
+    \item If the arrows between our points meet head to head and head to tail path is blocked.
+    \item If the arrows meet at node $C$ heat to head and nether the node nor it's desendence belong to $z$ (no "explaining" away)
+\end{itemize}
+\section{Time to learn}
+We can decompose learing process to parameter learning (modeling parameters of graph) and structure learning (determining structure of network).
+We can know structure of graph, know all data or any combination.
+\subsection{Known graph, known data}
+Well, we can just use MAP estimation and we are fine. We treat given parameter as random varible (hidden), assume we have some hyperparameters, we take some prior and then just use MAP.
+In discrete case we use something like binomial distribution. In case of many posisble outcomes we can use multinomial distribution (with conjugate prior in form of dirichlet distrubution).
+\subsection{Known data, unknown graph}
+Well, just want to know the model, we can write
+\begin{equation}
+    P(G|D)\propto P(D|G)P(G)=\int P(D|G,\theta)P(\theta|G)P(G)\dd\theta
+\end{equation}
+Its bad but we can sample. One important thing - Bayes factor $\frac{p(\mathcal{D}|M_i)}{P(\mathcal{D}|M_j)}$. It is used to decide which model is better.
+\subsection{Markov chains as examples of bayesian networks}
+Lets think of the chain that is composed of $N$ parts $X_i$. Because we have chain $X_i$ is dependent only on $X_{i-1}$. When we have Markov property 
+\begin{equation}
+    P(X_i|X_{i-1})=P(X_2|X_1)
+\end{equation}.
+As always when dealing with markov chains we have also classical transition matrix $T$. Example: CpG islands. We considere DNA sequence. Sometimes
+CG pars will be more often then others what is caled CpG island. When we have supervised learing and somebody gave us some data labeld as cpg or not cpg ilands we can imagine, that
+we have two models for two cases labeld $T^+$, $T^-$. We then can use something like log-odds 
+\begin{equation}
+    S(X)=\log{\frac{P(X|T^+)}{P(X|T^-)}}
+\end{equation}. We can set a threshold for clasification and we have a classificator!
+\section{(Gaussian) Mixture Models}
+Lets get into, we have thata, that is clustered ($n$ components, $d$ dimensional data). Each compenet have weights $\pi_i$ and are assumed to represent propability of sampling the obejct from given 
+subtype. We have hidden random varible $z_i$ and we assume
+\begin{align*}
+    Z_j \sim Mult(\pi,1)\\
+    x_i|z_i\sim \mathcal{N}(\mu_z,\Sigma_z)
+\end{align*}.
+\textbf{We do not observe to which cluster observation belongs!} In case of clustering we just want to infer what is $z_i$, we can do it using what we previosly introduced so
+\begin{equation}
+    P(z_i=j|x_i)\propto\pi_i\phi(P(x_i|\mu_j,\Sigma_j))
+\end{equation}
+We can also imagine, that we do not know $\pi_j$ or parameters of gauss distributions. In this case we can maximize log-likelihood of our date with respoect to parameters. Well, in case when
+we have only one distribution it is easy, if not we are essentialy screwd as there is no ansewr in closed form. We need to know $z_i$ to estimate parameters if we want to work in case $n>1$ as 
+we can introduce something like complete log-likelihood (we know not only $x_i$ but also $z_i$). But there is also one more way\ldots
+
+\subsection{Expectetion Maximalization}
+This is what we can do
+\begin{itemize}
+    \item Initalize our varibles, $z_i$ and $\mu_j$, $\Sigma_j$
+    \item Alternate until convergence \begin{itemize}
+        \item   Compute soft class membersips given current parameters (soft means distribution of propabilities, not point estimate)
+        \item   Use point estimates to determine cluster membership, estimate $\pi_i$ and then compute $\mu_j$ $\Sigma_j$ using techniques we previosly mentioned. 
+    \end{itemize}
+\end{itemize}
+What we see, that we take some values, perform easy task that we described previosly. We always aproximate and then itarate. It can be shown that this algorithm converges but only
+to local minimum.
+
 
 \end{document}
+
