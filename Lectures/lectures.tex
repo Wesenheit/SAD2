@@ -184,8 +184,21 @@ This is what we can do
     \end{itemize}
 \end{itemize}
 What we see, that we take some values, perform easy task that we described previosly. We always aproximate and then itarate. It can be shown that this algorithm converges but only
-to local minimum.
-
-
+to local minimum. Time for some cool calculations, there is hidden varible $Z$, observed varibles $X$ and parameters of $Z$ and $X$ $\lambda$ and $\theta$ respectively:
+\begin{align}
+    l_{obs}(\theta,\lambda)=\log\sum_Z P(X,Z|\theta,\lambda)\\
+    =\log\sum_Z q(z) \frac{P(X,Z|\theta,\lambda)}{q(z)}\\
+    =\log 
+\end{align}
+\subsection{Kullback-Leibler divergence}
+The KL divergence measures distance between tho propability distributions $Q(X)$,$P(X)$.
+\begin{equation}
+    D_{KL}(P||X)=-\sum_X P(X)\log{\frac{Q(X)}{P(X)}}
+\end{equation}.
+This is always nonnegativ and equal to $0$ only, if $Q(X)=P(X)$. what is important this is not symetrical!
+After some math we obtain, that
+\begin{equation}
+\mathcal{l}(\theta)=F(q,\theta)+D_{KL}(q||P)
+\end{equation}.
 \end{document}
 
