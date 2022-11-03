@@ -193,12 +193,28 @@ to local minimum. Time for some cool calculations, there is hidden varible $Z$, 
 \subsection{Kullback-Leibler divergence}
 The KL divergence measures distance between tho propability distributions $Q(X)$,$P(X)$.
 \begin{equation}
-    D_{KL}(P||X)=-\sum_X P(X)\log{\frac{Q(X)}{P(X)}}
+    D_{KL} (P || X)=-\sum_X P(X)\log{\frac{Q(X)}{P(X)}}
 \end{equation}.
 This is always nonnegativ and equal to $0$ only, if $Q(X)=P(X)$. what is important this is not symetrical!
 After some math we obtain, that
 \begin{equation}
-\mathcal{l}(\theta)=F(q,\theta)+D_{KL}(q||P)
+\mathcal{L}(\theta)=F(q,\theta)+D_{KL}(q||P)
 \end{equation}.
+\section{Variational inference}
+What we want to do? Basicly we want to aprroximate $P(Z|X)\approx Q(Z)$. Now lets go to ELBO
+\subsection{ELBO}
+lets use $P(Z|X)$ and plug it inot KL divergence
+\begin{align}
+    G_{KL}(Q||P)=\sum_Z Q(Z)\left[ \log{\frac{Q(Z)}{P(Z.X)}}+\log{P(X)}\right]\\
+    =\mathcal{E_{Q}}\left[\log{Q(Z)}-\log{P(Z.X)}\right] +\log{P(x)}
+\end{align}
+Hence
+\begin{equation}
+    \log{P(X)}=D_{KL}(P||Q)+F(Q)
+\end{equation}
+where $F(Q)$ is called evidence lower bound (ELBO). In EM case we were taking subsituting $Q(Z)=P(Z|X)$ because we had analitical forms of $P(Z|X)$, this time we need to make more approximations.
+How to do it? We can take something like general set of functions and just to use some software for nonlinear optimization. There is also other way called method of factorized distributions.
+We assume, there is factorization of $Z$ into separate domasins $Z_i$ so it can be factorized as joint propability of few distributions.
+
 \end{document}
 
