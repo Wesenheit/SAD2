@@ -13,6 +13,8 @@
 \usepackage{verbatim}
 \usepackage{svg}
 \usepackage{textgreek}
+\usepackage{tikz}
+\usetikzlibrary{bayesnet}
 \usepackage[doublespacing]{setspace}
 \usepackage[toc,page]{appendix}
 \restylefloat{table}
@@ -24,7 +26,8 @@
 \newcommand{\Title}{Statistical Data Analysis 2}
 \title{\huge \bf \Title\\}
 \author{Mateusz Kapusta}
-
+\DeclareRobustCommand{\bbone}{\text{\usefont{U}{bbold}{m}{n}1}}
+\DeclareMathOperator{\EX}{\mathbb{E}}% expected value
 \rhead{\it \Ti}
 \lhead{\Author}
 \begin{document}
@@ -215,6 +218,38 @@ Hence
 where $F(Q)$ is called evidence lower bound (ELBO). In EM case we were taking subsituting $Q(Z)=P(Z|X)$ because we had analitical forms of $P(Z|X)$, this time we need to make more approximations.
 How to do it? We can take something like general set of functions and just to use some software for nonlinear optimization. There is also other way called method of factorized distributions.
 We assume, there is factorization of $Z$ into separate domasins $Z_i$ so it can be factorized as joint propability of few distributions.
-
+\section{Variational Autoencoders}
+This time we will cover theorey behind Variational Autoencoders.
+\begin{figure}[H]\label{var_enc}
+    \centering
+    \begin{tikzpicture}
+        \node[latent] (psi) at (0,1.5) {\Large $\Psi$};
+        \node[latent] (z) at (0,0) {\Large $Z_i$};
+        \node[obs] (x)  at (0,-2) {\Large $X_i$};
+        \node[latent] (theta) at (2,-1) {\Large $\theta$};
+        \path[draw,->] (z) edge (x);
+        \path[draw,->] (psi) edge(z);
+        \path[draw,->] (theta) edge (x);
+        \plate [color=red] {part1}  {(z)(x)} {$i=1,\ldots,N$};
+    \end{tikzpicture}
+    \caption{Bayesian net model for variational autoencoder}
+\end{figure}
+In autoencoders we have some prior distribution $\Psi$. In the case of variational autoencoder we are modeling $P(X_i|Z_I)$ by neural network making it very powerfull model. Variational autoencoders
+are generaiv models so they allow us to generate new data given a sample model. $p_\theta(x|z)$ is posterior modelled by neural network called {\italic decoder}. $p_\psi$ is reffered as
+prior distribution.
+Our model can be we are modeling:
+\begin{itemize}
+    \item Soft propability 
+    \item Propability of 
+\end{itemize}. We can also write down ELBO for VAE:
+\begin{equation}
+ELBO=\EX{q_\theta} [log{p_\theta(X|Z})]-D_{KL}(q_\phi||p_\psi)
+\end{equation}. This equation is nondifferentiable in our case as numericly we want to sample from the distribution and this is non diffferentialbe. We can deal with this problem
+asigning 
+\begin{equation}
+    Z=\mu(X)+\epsilon \sigma(X)
+\end{equation}
+where $\sigma$ and $\mu$ are modeld by neural networks based on $X$ and $\epsilon$ is smapled from standard normal guassian. This is differentiable and can allow us to use backpropagation to 
+train encoder neural network.
 \end{document}
 
