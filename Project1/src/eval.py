@@ -8,7 +8,7 @@ plt.rcParams["text.usetex"]=True
 plt.rcParams["test.font"]="Serif"
 sns.set_theme()
 
-data_dir="/home/mitra/Files/Math/SAD2/Project1/data"
+data_dir="../data"
 
 
 def plot_first():
