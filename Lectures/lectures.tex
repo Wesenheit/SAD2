@@ -235,7 +235,7 @@ This time we will cover theorey behind Variational Autoencoders.
     \caption{Bayesian net model for variational autoencoder}
 \end{figure}
 In autoencoders we have some prior distribution $\Psi$. In the case of variational autoencoder we are modeling $P(X_i|Z_I)$ by neural network making it very powerfull model. Variational autoencoders
-are generaiv models so they allow us to generate new data given a sample model. $p_\theta(x|z)$ is posterior modelled by neural network called {\italic decoder}. $p_\psi$ is reffered as
+are generaiv models so they allow us to generate new data given a sample model. $p_\theta(x|z)$ is posterior modelled by neural network called  decoder. $p_\psi$ is reffered as
 prior distribution.
 Our model can be we are modeling:
 \begin{itemize}
@@ -243,7 +243,7 @@ Our model can be we are modeling:
     \item Propability of 
 \end{itemize}. We can also write down ELBO for VAE:
 \begin{equation}
-ELBO=\EX{q_\theta} [log{p_\theta(X|Z})]-D_{KL}(q_\phi||p_\psi)
+ELBO=\EX{q_\theta} [\log{p_\theta(X|Z)}]-D_{KL}(q_\phi||p_\psi)
 \end{equation}. This equation is nondifferentiable in our case as numericly we want to sample from the distribution and this is non diffferentialbe. We can deal with this problem
 asigning 
 \begin{equation}
