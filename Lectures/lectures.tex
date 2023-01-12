@@ -251,5 +251,47 @@ asigning
 \end{equation}
 where $\sigma$ and $\mu$ are modeld by neural networks based on $X$ and $\epsilon$ is smapled from standard normal guassian. This is differentiable and can allow us to use backpropagation to 
 train encoder neural network.
+
+\section{Sampling}
+
+TODO
+
+\section{Model selection}
+We can divide model selection in two categories, structure learing and parameter learning. Now lets introduce new measure called mutual information
+\begin{equation*}
+    I(X,Y)=H(X)-H(X,I)=D_{KL}(P(X,Y)||P(X)P(Y))
+\end{equation*}
+If two random varibles are independent mutual information is zero! Now let's consider we have some bayesian tree $T$. We can measure weight of tree as
+\begin{equation*}
+    w(T)=\sum_i I(X_i,X_{pa(i)})
+\end{equation*}
+. We can prrove that this type of selection minimalizes divergence between orginal joint distribution and joint distribution modelled by tree. To search for such tree
+we can use kruskal algorithm for maximum spanning tree with weights but weights are mutual information between varibles. To compute those values one can use maximum likelihood
+estimator $f_{ij}(u,v)=P(u=i,v=j)$ to compute
+\begin{equation*}
+    \hat{I}(x_i,x_j)=\sum_{u,v}f_{ij}(u,v)\log{\frac{f_{ij}(u,v)}{f_i(u)f_j(v)}}
+\end{equation*}. Now lets try to compute Bayes factor to compare models. We want to find $P(D|G)$ so marginalized out propability of data fiven model. We know
+\begin{equation*}
+    P(D|G)=\int P(D|G,\theta)P(\theta|G)\dd \theta
+\end{equation*} which is hard to compute. When we assume posterior of parameter is unimodal, peeked and had a rather uninformative prior we can approximate this as
+\begin{equation*}
+    \log{P(D|G)}=\log{P(D|g,\hat{\theta})}+\log{\frac{\Delta \theta_{posterior}}{\Delta \theta_{prior}}}
+\end{equation*} where $\hat{\theta}$ is MAP estimator. We see we have penalization for overfitting models in the form of deviation from MAP estimate which explodes if posterior
+is very narrow. We can also introduce other criterions. Using Laplace expansion (assuming gaussian distribution) we can introduce
+\begin{equation*}
+    \log{P(D|G)}=\log{P(D|\hat{\theta},G)}-\frac{1}{2}\log{\det{H}}+\frac{\nu}{2}\log{2\pi c^2}
+\end{equation*}
+Where $H$ is hessian matrix of evidence defined as $E(\theta)=-\log{P(D|\theta,G)}$. Then laplace aproximation yields
+\begin{equation*}
+    E(\theta)\approx E(\hat{\theta})+\frac{1}{2}(\theta-\hat{\theta})^{T}\vb{H}(\theta-\hat{\theta})
+\end{equation*}. When we further assume equall curvature along direction $\epsilon_i=2\pi N c^2$ where $\epsilon_i$ is eigenfunction of $H$ we get
+\begin{equation*}
+    \log{P(D|G)}\approx \log(D|\hat{\theta},G)-\frac{\nu}{2}\log{N}
+\end{equation*}
+where $\nu$ is dimension of parameter space. We can also want to use search and score aproach, we introduce graph and then by small greedy modifications we want to
+find better structure. During this approach we want to score small modifications instead of score whole model. This is possible of BIC due to the fact that
+BIC also decomposes as likelihood and we can introduce local score instead of global one.
+\subsection{Structural EM}
+
 \end{document}
 
