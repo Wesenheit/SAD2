@@ -5,7 +5,7 @@ from tqdm import tqdm
 import pandas as pd
 from Gibbs_sampler import Node, BN,Rubin_Gelman
 import matplotlib.pyplot as plt
-np.random.seed(42)
+np.random.seed(7)
 
 def main():
     net=BN()
@@ -24,12 +24,19 @@ def main():
     fig,[ax1,ax2]=plt.subplots(2,1,figsize=(6,4))
     freq_1=np.cumsum(samples["rain"])/(np.arange(0,num)+1)
     freq_2=np.cumsum(samples["cloud"])/(np.arange(0,num)+1)
-    ax1.plot(freq_1,c="black")
+    samples=net.gibbs_sampling(num,0,1)
+    freq_12=np.cumsum(samples["rain"])/(np.arange(0,num)+1)
+    freq_22=np.cumsum(samples["cloud"])/(np.arange(0,num)+1)
+    ax1.plot(freq_1,c="black",label=r"1st run")
+    ax1.plot(freq_12,c="orange",label=r"2nd run")
     ax1.grid()
     ax1.set_xlabel(r"$t$")
     ax1.set_title(r"Rain")
-    ax2.plot(freq_2,c="black")
+    ax1.legend()
+    ax2.plot(freq_2,c="black",label=r"1st run")
+    ax2.plot(freq_22,c="orange",label=r"2nd run")
     ax2.grid()
+    ax2.legend()
     ax2.set_xlabel(r"$t$")
     ax2.set_title(r"Cloud")
     plt.tight_layout()
@@ -74,7 +81,7 @@ def main():
         values[name]=np.stack(values[name],axis=0)
         print(values[name].shape)
     
-    test_rubin=Rubin_Gelman(values)
+    test_rubin=Rubin_Gelman(values,True)
     print("RG estimate for final estimate: ",test_rubin)
 
 
@@ -91,7 +98,7 @@ def main():
         print(values[name].shape)
     
     
-    test_rubin=Rubin_Gelman(values)
+    test_rubin=Rubin_Gelman(values,True)
     print("RG value for first estimate: ",test_rubin)
 if __name__=="__main__":
     main()

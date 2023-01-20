@@ -95,17 +95,26 @@ class BN():
         return out
 
 
-def Rubin_Gelman(dictionary):
+def Rubin_Gelman(dictionary,estimate_d=False):
     odp={}
     for name in dictionary:
         arr=dictionary[name]
         N=arr.shape[1]
         M=arr.shape[0]
         means=np.mean(arr,axis=1)
-        std=np.std(arr,ddof=1)
+        vars=np.var(arr,axis=1)
         mean_of_means=np.mean(arr)
-        B=N*np.std(means,ddof=1)
-        W=np.mean(std)
+        B=N*np.var(means,ddof=1)
+        W=np.mean(vars)
         V=(N-1)/N*W+(M+1)/(M*N)*B
-        odp[name]=np.sqrt(V/W)
+        if estimate_d:
+            var_W=np.var(vars)
+            var_B=2*B**2/(M-1)
+            cov_s2x2=np.cov(vars,means**2)[0,1]
+            cov_s2x=np.cov(vars,means)[0,1]
+            VarV=(N-1)**2/N**2*var_W/M+(M+1)**2/(M*N)**2*var_B+2*(M+1)*(N-1)/(M*N**2)*N/M*(cov_s2x2-2*mean_of_means*cov_s2x)
+            d=2*V/(VarV)
+            odp[name]=np.sqrt((d+3)*V/(W*(d+1)))
+        else:
+            odp[name]=np.sqrt(V/W)
     return odp

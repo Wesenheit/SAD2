@@ -109,19 +109,19 @@
     \end{tikzpicture}
     \caption{Bayesian diagram for rain network}\label{Rain}
 \end{figure}
-\hspace{1cm}\par Let's conisder Bayesian Belif network depicted at \ref{Rain}. Each of the varibles can be either True or False. Conditional dependence between them in encoded in the matrix next 
-to each of the nodes. Right now let's do not think about which varibles are observed and try to dervie formula for propability of one node with respect to other varibles which remain constant
+\hspace{1cm}\par Let's conisder Bayesian Belif network depicted at figure \ref{Rain}. Each of the varibles can be either True or False. Conditional dependence between them in encoded in the matrix next 
+to each of the nodes. Right now let's do not think about which varibles are observed and try to dervie formula for probability of one node with respect to other varibles which remain constant
 \begin{enumerate}
     \item {\Large \textbf{$P(C=T|R=T,S=T,W=T)$}}\\
-    We can decompose local propability distribution to 
+    We can decompose local probability distribution to 
     \begin{equation*}
         P(C=T|R=T,S=T,W=T)\propto P(S=T|C=T)P(R=T|C=T)=0.1\cdot0.8=0.08
     \end{equation*}
-    In order to find true propability we need to compute renormalazing constant
+    In order to find true probability we need to compute renormalazing constant
     \begin{equation*}
         P(C=F|R=T,S=T,W=T)\propto P(S=T|C=F)P(R=T|C=F)=0.5\cdot0.2=0.10
     \end{equation*}.
-    After renomalization
+    After renormalization
     \begin{equation*}
         P(C=T|R=T,S=T,W=T)=\frac{0.08}{0.08+0.1}\approx0.44
     \end{equation*}
@@ -131,11 +131,11 @@ to each of the nodes. Right now let's do not think about which varibles are obse
     \begin{equation*}
         P(C=T|R=F,S=T,W=T)\propto P(S=T|C=T)P(R=F|C=T)=0.1\cdot0.2=0.02
     \end{equation*}
-    In order to find true propability we need to compute renormalazing constant
+    In order to find true probability we need to compute renormalazing constant
     \begin{equation*}
         P(C=F|R=F,S=T,W=T)\propto P(S=T|C=F)P(R=F|C=F)=0.5\cdot0.8=0.4
     \end{equation*}.
-    After renomalization
+    After renormalization
     \begin{equation*}
         P(C=T|R=F,S=T,W=T)=\frac{0.02}{0.02+0.4}\approx0.047
     \end{equation*}
@@ -145,11 +145,11 @@ to each of the nodes. Right now let's do not think about which varibles are obse
     \begin{equation*}
         P(R=T|C=T,S=T,W=T)\propto P(W=T|R=T,S=T)P(R=T|C=T)=0.99\cdot0.8=0.792
     \end{equation*}
-    In order to find true propability we need to compute renormalazing constant
+    In order to find true probability we need to compute renormalazing constant
     \begin{equation*}
         P(R=F|C=T,S=T,W=T)\propto P(W=T|R=F,S=T)P(R=F|C=T)=0.9\cdot0.2=0.18
     \end{equation*}.
-    After renomalization
+    After renormalization
     \begin{equation*}
         P(R=T|C=T,S=T,W=T)=\frac{0.792}{0.18+0.792}\approx0.81
     \end{equation*}
@@ -159,35 +159,35 @@ to each of the nodes. Right now let's do not think about which varibles are obse
     \begin{equation*}
         P(R=T|C=F,S=T,W=T)\propto P(W=T|R=T,S=T)P(R=T|C=F)=0.99\cdot0.2=0.198
     \end{equation*}
-    In order to find true propability we need to compute renormalazing constant
+    In order to find true probability we need to compute renormalazing constant
     \begin{equation*}
         P(R=F|C=F,S=T,W=T)\propto P(W=T|R=F,S=T)P(R=F|C=F)=0.9\cdot0.8=0.72
     \end{equation*}.
-    After renomalization
+    After renormalization
     \begin{equation*}
         P(R=T|C=F,S=T,W=T)=\frac{0.198}{0.72+0.198}\approx0.22
     \end{equation*}
 \end{enumerate}
-Our procedure is very simple and allows us to determine marbinal propability of one varible with respect to others.  This simple procedure
-allows us to construct Gibbs sampler which uses this simple procedure to sample from our model in general case and will help to estimate what is marginal propability of
+Our procedure is very simple and allows us to determine marginal probability of one varible with respect to others.  This simple procedure
+allows us to construct Gibbs sampler which uses this simple procedure to sample from our model in general case and will help to estimate what is marginal probability of
 $P(R=T,S=T,W=T)$.
 \section{Gibbs sampler}
 \hspace{1cm} Gibbs sampler was implemented in Python programing language using NumPy. After implementation $100$ samples were drown from 
-model. This small sample allowed to estiamte that $P(R=T,S=T,W=T)\approx 0.18$. This result probably does not represent correct value as there might be a problem
-with convergence of our chain. Hence we need to fin wheter is it safe to infer from our chain.
+model. This small sample allowed to estimate that $P(R=T,S=T,W=T)\approx 0.19$. This result probably does not represent correct value as there might be a problem
+with convergence of our chain. Hence we need to find whether is it safe to infer from our chain.
 \section{Convergence Diagnostics}
-In order to determine wheter our chain in safe to infer from chain two test were performed. Firstly relative frequency of occurence was checked and then 
+In order to determine whether our chain in safe to infer from two test were performed. Firstly relative frequency of occurence was checked and then 
 autocorrelation test was performed. During the first $N=50000$ samples were drown from one chain and then realative frequency for each varible denoted as $\theta$ was calculated using
 \begin{equation*}
-    f(t)=\frac{1}{t}\sum_0^{t}\theta_t
-\end{equation*} allowing to present, how our estimates change acros time. Results are presented on figure \ref{plot_5}
+    f(t)=\frac{1}{t}\sum_{i=1}^{t}\theta_i
+\end{equation*} allowing to present, how our estimates change across time. Results are presented on figure \ref{plot_5}
 \begin{figure}[H]
     \begin{center}
     \includegraphics{plot_5.png}
     \end{center}
     \caption{Relative frequency $f$ of parameter against position in chain $t$ for Rain varible and Cloud varible}\label{plot_5}
 \end{figure}
-We can see, that around $t\approx 10000$ our chain is begining to stabilize and from this point onward our estimates do not change. That need to be emphasized is huge 
+We can see, that around $t\approx 10000$ our chain is begining to stabilize and from this point onward our estimates do not change. What need to be emphasized is huge 
 bump at the begining of our sequence. This behaviour suggest our chain is very noisy at the beginning and we should not infer from the first $100$ samples only.
 Second test was based on the lagged autocorrelation function. Firstly we can introduce lagged sequence $\theta^{l}_t=\theta_{t+l}$. Due to finite length of our chain last $l$ 
 elements of orignal chain are discarded in this calculation. We can then introduce Pearson corelation cooficient $P(l)$ using equation
@@ -195,16 +195,16 @@ elements of orignal chain are discarded in this calculation. We can then introdu
     P(l)=\frac{\sum_{i=0}^{n}(\theta_i-\hat{\theta})(\theta^l_i-\hat{\theta^l})}
     {\sqrt{\sum_{i=0}^n(\theta_i^2-(\hat{\theta})^2)}\sqrt{\sum_{i=0}^n((\theta_i^l)^2-(\hat{\theta^l})^2)}}
 \end{equation*} where $\hat{\theta}$ is mean value of $\theta$ while $n$ is effective length of our sample equal to $n=N-l$ (as we discard last $l$ draws).
-Values of our cooficient were computed for $l\in \langle 0 , 100\rangle$ were computed and ploted on figure \ref{plot_6}.
+Values of our cooficient for $l\in \langle 0 , 100\rangle$ were computed and ploted on figure \ref{plot_6}.
 \begin{figure}[H]
     \begin{center}
     \includegraphics{plot_6.png}
     \end{center}
     \caption{Corelation cooficients $P(l)$ of parameter against lag $l$ for Rain varible and Cloud varible}\label{plot_6}
-\end{figure} We can see, that for $l>0$ autocorrelation is neglectable so suggested thinning out should be around this value. 
+\end{figure} We can see, that for $l>20$ autocorrelation is neglectable so suggested thinning out should be around this value (in final model we will use $l=50$).
 \subsection{Final model}
 \hspace{1cm} After determining suitable parameters in previous section final sampling took place with burnin $N_b=10000$ and thining out $l=50$. Based on
-MCMC estimation $P(R=T,S=T,W=T)\approx 0.33$ was obtained. Now we can compare this result with exact one. In order to calculate analyticly value of propability 
+MCMC estimation $P(R=T,S=T,W=T)\approx 0.30$ was obtained. Now we can compare this result with exact one. In order to calculate analyticly value of probability 
 we will follow procedure from first section. We can write
 \begin{align*}
     P(R=T|S=T,W=T)\propto P(R=T|C=T)P(W=T|R=T,S=T)P(S=T|C=T)+\\ +P(R=T|C=F)P(W=T|R=T,S=T)P(S=T|C=F)=0.8\cdot0.99\cdot0.1+0.2\cdot 0.99\cdot0.5=0.1881
@@ -216,29 +216,30 @@ we will follow procedure from first section. We can write
 Combining both results we get 
 \begin{equation*}
     P(R=T|S=T,W=T)=\frac{0.1881}{0.1881+0.378}\approx 0.332
-\end{equation*}. We can hence see that our result is just little of from the exact value. moreover we can see that our estimation is much better then one
+\end{equation*}. We can hence see that our result is just little of from the exact value. Moreover we can see that our estimation is much better then one
 based on first $100$ samples which do not have anything in common with exact result.
 \subsection{Gelman-Rubin Test}
-\hspace{1cm} Finaly in order to find wheter chain have reached convergence Gelman-Rubin test was implemented. In order to test for convergence 
+\hspace{1cm} Finaly in order to find whether chain have reached convergence Gelman-Rubin test was implemented. In order to test for convergence 
 following procedure was followed. $M$ runs of same MCMC model was performed. For each chain mean and variance were calculated
 \begin{align}
     \hat{\theta^m}=\frac{1}{M}\sum_{i=1}^N \theta^{m}_i\\
-    \sigma^m=\frac{1}{N-1}\sum_{i=0}^N (\theta^m_i-\hat{\theta^m})
-\end{align}. Those parameters present parameters inside each of chains. Then we define mean of all chains
+    \sigma^2_m=\frac{1}{N-1}\sum_{i=0}^N (\theta^m_i-\hat{\theta^m})^2
+\end{align}. Those parameters characterize each of the chains individually. Then we define mean of all chains
 \begin{equation*}
     \hat{\theta}=\frac{1}{M}\sum_{m=1}^M \hat{\theta^m}
 \end{equation*} and variance of means across common mean
 \begin{equation*}
-    B=\frac{N}{M-1}\sum_{m=1}(\hat{\theta^m}-\hat{\theta})^2
+    B=\frac{N}{M-1}\sum_{m=1}^M (\hat{\theta^m}-\hat{\theta})^2
 \end{equation*}. At the end we can introduce avarage variance of all chains
 \begin{equation*}
-    W=\frac{1}{M}\sum_{m=0}^M\sigma^{m}
+    W=\frac{1}{M}\sum_{m=1}^M\sigma_m^{2}
 \end{equation*} together with estimatior
 \begin{equation*}
     \hat{V}=\frac{N-1}{N}W+\frac{M+1}{MN}B
 \end{equation*}. Under hypothesis that we reached convergence $\hat{V}$ is unbiased estimator of true variance. On the other hande in this scenario 
-also $W$ should be unbiased estimator of variance. Hence we can introduce value $R=\sqrt{\frac{\hat{V}}{W}}$ which should be $1$ in the case of convergence. Rubin Gelman test
-was performed using $M=40$ and for both final sampler parameters and first ones. For $100$ samples with no burnout and thinning out statistics for Rain and Cloud node were
-$R_{rain}\approx 1.117$ and $R_{cloud}\approx  1.116$ respectivly. For final paramters with $N=100$, burnin $N_b=10000$ and thining out $l=50$ statistic had value $R_{rain}=1.047$
-and $R_{cloud}=1.055$ so we can clearly see we improved in the convergence and and first sample was certainly biased and should not be used to infer parameters. 
+also $W$ should be unbiased estimator of variance. Hence we can introduce value $R=\sqrt{\frac{(3+d)\hat{V}}{(1+d)W}}$ which should be $1$ in the case of convergence. 
+$d$ parameter is estimation of number of degrees of freedom and can be obtained using method of moments $d=\frac{2\hat{V}}{Var(V)}$.
+Rubin Gelman test was performed using $M=40$ and statistics $R$ were calculated for both final sampler as the first one. For $100$ samples with no burnout and thinning out statistics for Rain and Cloud node were
+$R_{rain}\approx 1.02$ and $R_{cloud}\approx  1.03$ respectivly. For final parameters with $N=100$, burnin $N_b=10000$ and thining out $l=50$ statistic had value $R_{rain}\approx1.0004$
+and $R_{cloud}\approx1.002$ so we can clearly see we improved in the convergence and and first sample was certainly biased and should not be used to infer parameters. 
 \end{document}
