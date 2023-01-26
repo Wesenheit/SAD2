@@ -93,7 +93,7 @@
             nodes={text width=1em,font=\bfseries}
         },] at (0,-9.5)
         {
-        C & R &  P(W|S,R)\\
+        S & R &  P(W|S,R)\\
         T & T  & 0.99\\
         T & F  & 0.9\\
         F & T  & 0.9\\
@@ -207,7 +207,7 @@ Values of our cooficient for $l\in \langle 0 , 100\rangle$ were computed and plo
 MCMC estimation $P(R=T,S=T,W=T)\approx 0.30$ was obtained. Now we can compare this result with exact one. In order to calculate analyticly value of probability 
 we will follow procedure from first section. We can write
 \begin{align*}
-    P(R=T|S=T,W=T)\propto P(R=T|C=T)P(W=T|R=T,S=T)P(S=T|C=T)+\\ +P(R=T|C=F)P(W=T|R=T,S=T)P(S=T|C=F)=0.8\cdot0.99\cdot0.1+0.2\cdot 0.99\cdot0.5=0.1881
+    P(R=T|S=T,W=T)\propto P(R=T|C=T)P(W=T|R=T,S=T)P(S=T|C=T)+\\ +P(R=T|C=F)P(W=T|R=T,S=T)P(S=T|C=F)=0.8\cdot0.99\cdot0.1+0.2\cdot 0.99\cdot0.5=0.1782
 \end{align*}
 . On the other hand
 \begin{align*}
@@ -215,7 +215,7 @@ we will follow procedure from first section. We can write
 \end{align*}.
 Combining both results we get 
 \begin{equation*}
-    P(R=T|S=T,W=T)=\frac{0.1881}{0.1881+0.378}\approx 0.332
+    P(R=T|S=T,W=T)=\frac{0.1782}{0.1782+0.378}\approx 0.32
 \end{equation*}. We can hence see that our result is just little of from the exact value. Moreover we can see that our estimation is much better then one
 based on first $100$ samples which do not have anything in common with exact result.
 \subsection{Gelman-Rubin Test}
